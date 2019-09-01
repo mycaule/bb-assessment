@@ -7,7 +7,7 @@ object Mower {
     val Right = Value("D")
     val Forward = Value("A")
 
-    def parse(s: String) = s.toList.map(_.toString).map(this.withName)
+    def parse(s: String) = scala.util.Try(s.toList.map(_.toString).map(this.withName)).getOrElse(Nil)
   }
 
   object Direction extends Enumeration {
@@ -19,7 +19,7 @@ object Mower {
   }
 
   case class Lawn(x: Integer, y: Integer) {
-    def check(pos: Position) = 0 <= pos.x && pos.x <= x && 0 <= pos.y && pos.y <= y
+    def check(pos: Position): Boolean = (0 <= pos.x && pos.x <= x && 0 <= pos.y && pos.y <= y)
   }
 
   object Lawn {
@@ -48,8 +48,8 @@ object Mower {
     }
   }
 
-  def move(pos: Position, cmd: Command.Command) = {
-    cmd match {
+  def move(lawn: Lawn)(pos: Position, cmd: Command.Command) = {
+    val newPos = cmd match {
       case Command.Left => pos.d match {
         case Direction.North => pos.copy(d = Direction.West)
         case Direction.South => pos.copy(d = Direction.East)
@@ -69,22 +69,49 @@ object Mower {
         case Direction.West  => pos.copy(x = pos.x - 1)
       }
     }
+
+    // La tondeuse ne bouge pas si on essaie de la faire sortir
+    if (lawn.check(newPos)) newPos else pos
   }
 
   def main(args: Array[String]): Unit = {
-    // val str1: String = scala.ioStdIn.readLine
-    val lawn = Lawn(5, 5) // TODO
+    val file = scala.io.Source.fromFile(args(0)).getLines
 
-    // val str2: String = scala.io.StdIn.readLine
-    // val str3: String = scala.io.StdIn.readLine
-    val program: Seq[(Position, Seq[Command.Command])] = Seq(
-      (Position(1, 2, Direction.North), Command.parse("GAGAGAGAA")),
-      (Position(3, 3, Direction.East), Command.parse("AADAADADDA"))
-    ) // TODO
+    // Paramètres de configuration
+    val DEBUG = false
 
-    val positions: Seq[Position] = program.map { case (pos, cmds) => cmds.foldLeft(pos)(Mower.move) }
+    Lawn.parse(file.next) match {
+      case None => println("La taille de la pelouse n'a pas pu être lue.")
+      case Some(lawn) =>
+        println(s"Pelouse de taille ${lawn.x}x${lawn.y}")
 
-    println("Positions finales:")
-    positions.foreach(println)
+        var pos: Option[Position] = None
+        var cmds: Seq[Command.Command] = Nil
+
+        // Stratégie basique pour parser un fichier par paires de lignes éventuellement invalides
+        file.foreach(line => {
+          pos = Position.parse(line) match {
+            case p if p.isDefined => p
+            case _                => pos
+          }
+
+          cmds = Command.parse(line) match {
+            case l if l.nonEmpty => l
+            case _               => cmds
+          }
+
+          (pos, cmds) match {
+            case (Some(oldP), c) if c.nonEmpty =>
+              val newP = cmds.foldLeft(oldP)(Mower.move(lawn))
+              println(s"$newP")
+
+              if (DEBUG) println(s" :: $oldP ==> $newP via ${cmds.mkString}")
+
+              pos = Some(newP)
+              cmds = Nil
+            case _ => ()
+          }
+        })
+    }
   }
 }
