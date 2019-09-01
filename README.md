@@ -22,7 +22,7 @@ sbt run
 
 ### Livrable
 
-Nous implémentons un objet [*Mower*](src/main/scala/mycaule/Mower.scala) capable de :
+Nous implémentons un objet [*Mower*](src/main/scala/mowitnow/Mower.scala) capable de :
 - parser un fichier texte d'instructions,
 - écrire les données au format de chaîne de caractères,
 - calculer les positions finales à l'aide d'un algorthme itératif.
