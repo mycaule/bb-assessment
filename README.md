@@ -20,6 +20,24 @@ sbt run examples/program.mow
 
 ### Solution
 
+La stratégie basique pour parser un fichier par paires de lignes éventuellement invalides consiste à tenter d'extraire une position ou une liste de commande à chaque ligne. Cette stratégie présente l'intérêt de pouvoir être étendue au cas d'un stream avec beaucoup d'instructions venant en continu.
+
+On suppose que la tondeuse ne change pas de coordonnées si on essaie de la faire bouger hors de la zone permise par la pelouse.
+
+Avec des notations matricielles, si on considère la matrice de rotation r(theta), le vecteur unitaire direction v(k), la position de la tondeuse p(k),
+En notant k l'état courant, l'état k+1 suivant est défini dans le système de coordonnées (x, y) par:
+
+```
+           | [[ 0 1],
+           | [-1 0]]    // si theta = -pi/2 (rotation à droite)
+r(theta) = |
+           | [[0 -1],
+           | [1  0]]    // si theta = +pi/2 (rotation à gauche)
+
+v(k+1) = r(theta) @ v(k)  // shape (2, 1)
+p(k+1) = p(k) + v(k+1)    // shape (2, 1)
+```
+
 ### Livrable
 
 Nous implémentons un objet [*Mower*](src/main/scala/mowitnow/Mower.scala) capable de :
@@ -37,22 +55,3 @@ Pelouse de taille 5x5
 ```
 
 Un mini système d'intégration continue est également mis en place dans [Travis CI](http://travis-ci.org/mycaule/ps-assessment).
-
-### Explications
-
-La stratégie basique pour parser un fichier par paires de lignes éventuellement invalides consiste à tenter d'extraire une position ou une liste de commande à chaque ligne. Cette stratégie présente l'intérêt de pouvoir être étendue au cas d'un stream avec beaucoup d'instructions venant en continu.
-
-On suppose que la tondeuse ne change pas de coordonnées si on essaie de la faire bouger hors de la zone permise par la pelouse.
-
-Avec des notations matricielles, si on considère la matrice de rotation r(theta), le vecteur unitaire direction v(k), la position de la tondeuse p(k),
-En notant k l'état courant, l'état k+1 suivant est défini dans le système de coordonnées (x, y) par:
-
-```
-r(theta) = [[0 1], [-1 0]] si theta = -pi/2 (rotation à droite)
-           [[0 -1], [1 0]] si theta = +pi/2 (rotation à gauche)
-
-v(k+1) = r(theta) * v(k)
-p(k+1) = p(k) + v(k+1)
-```
-
-On retrouve alors les formules de la fonction `def move`.
