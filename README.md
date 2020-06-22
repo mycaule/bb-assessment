@@ -1,6 +1,6 @@
 
 <p align="center">
-  June 2020 PS Interview Assessment
+  June 2020 BB Interview Assessment
 </p>
 
 <p align="center">
