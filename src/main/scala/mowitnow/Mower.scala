@@ -75,7 +75,8 @@ object Mower {
   }
 
   def main(args: Array[String]): Unit = {
-    val file = scala.io.Source.fromFile(args(0)).getLines
+    val filename = if (args.size > 0) args(0) else "examples/program.mow"
+    val file = scala.io.Source.fromFile(filename).getLines
 
     // Paramètres de configuration
     val DEBUG = false

@@ -4,11 +4,10 @@
 </p>
 
 <p align="center">
-  <a href="http://travis-ci.org/mycaule/ps-assessment"><img src="https://api.travis-ci.org/mycaule/ps-assessment.svg?branch=master" alt="Build Status"></a>
+  <a href="https://github.com/mycaule/bb-assessment/actions"><img src="https://github.com/mycaule/bb-assessment/workflows/Scala%20CI/badge.svg?branch=master" alt="Build Status"></a>
   <br>
   <br>
 </p>
-
 
 ### Utilisation
 ```
@@ -24,8 +23,8 @@ La stratégie basique pour parser un fichier par paires de lignes éventuellemen
 
 On suppose que la tondeuse ne change pas de coordonnées si on essaie de la faire bouger hors de la zone permise par la pelouse.
 
-Avec des notations matricielles, si on considère la matrice de rotation r(theta), le vecteur unitaire direction v(k), la position de la tondeuse p(k),
-En notant k l'état courant, l'état k+1 suivant est défini dans le système de coordonnées (x, y) par:
+Avec des notations matricielles, si on considère la matrice de rotation *r(theta)*, le vecteur unitaire direction *v(k)*, la position de la tondeuse *p(k)*,
+En notant *k* l'état courant, l'état *k+1* suivant est défini dans le système de coordonnées *(x, y)* par:
 
 ```
            | [[ 0 1],
@@ -40,7 +39,7 @@ p(k+1) = p(k) + v(k+1)    // shape (2, 1)
 
 ### Livrable
 
-Nous implémentons un objet [*Mower*](src/main/scala/mowitnow/Mower.scala) capable de :
+Nous implémentons un objet [`Mower`](src/main/scala/mowitnow/Mower.scala) capable de :
 - parser un fichier texte d'instructions,
 - écrire les données au format de chaîne de caractères,
 - calculer les positions finales à l'aide d'un algorthme itératif.
@@ -51,7 +50,6 @@ sbt:mower> run examples/program.mow
 Pelouse de taille 5x5
 1 3 N
 5 1 E
-[success] Total time: 0 s, completed Sep 1, 2019 7:01:40 PM
+[success] Total time: 1 s, completed Jun 22, 2020 12:02:14 PM
 ```
 
-Un mini système d'intégration continue est également mis en place dans [Travis CI](http://travis-ci.org/mycaule/ps-assessment).
