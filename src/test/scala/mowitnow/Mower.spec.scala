@@ -20,8 +20,8 @@ class MowerSpec extends FlatSpec with Matchers {
   }
 
   it should "parse instructions" in {
-    Command.parse("GAGA") shouldBe List(Left, Forward, Left, Forward)
-    Command.parse("ADAD") shouldBe List(Forward, Right, Forward, Right)
+    Command.parse("LFLF") shouldBe List(Left, Forward, Left, Forward)
+    Command.parse("FRFR") shouldBe List(Forward, Right, Forward, Right)
     Command.parse("????") shouldBe List()
   }
 
@@ -47,7 +47,7 @@ class MowerSpec extends FlatSpec with Matchers {
   }
 
   it should "solve simple examples" in {
-    Command.parse("GAGAGAGAA").foldLeft(Position(1, 2, North))(Mower.move(lawn)) shouldBe Position(1, 3, North)
-    Command.parse("AADAADADDA").foldLeft(Position(3, 3, East))(Mower.move(lawn)) shouldBe Position(5, 1, East)
+    Command.parse("LFLFLFLFF").foldLeft(Position(1, 2, North))(Mower.move(lawn)) shouldBe Position(1, 3, North)
+    Command.parse("FFRFFRFRRF").foldLeft(Position(3, 3, East))(Mower.move(lawn)) shouldBe Position(5, 1, East)
   }
 }

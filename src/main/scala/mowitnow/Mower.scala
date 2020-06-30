@@ -3,9 +3,9 @@ package mowitnow
 object Mower {
   object Command extends Enumeration {
     type Command = Value
-    val Left = Value("G")
-    val Right = Value("D")
-    val Forward = Value("A")
+    val Left = Value("L")
+    val Right = Value("R")
+    val Forward = Value("F")
 
     def parse(s: String) = scala.util.Try(s.toList.map(_.toString).map(this.withName)).getOrElse(Nil)
   }
@@ -78,18 +78,18 @@ object Mower {
     val filename = if (args.size > 0) args(0) else "examples/program.mow"
     val file = scala.io.Source.fromFile(filename).getLines
 
-    // Paramètres de configuration
+    // Configuration
     val DEBUG = false
 
     Lawn.parse(file.next) match {
-      case None => println("La taille de la pelouse n'a pas pu être lue.")
+      case None => println("The shape of the lawn could not be parsed.")
       case Some(lawn) =>
-        println(s"Pelouse de taille ${lawn.x}x${lawn.y}")
+        println(s"Lawn of shape ${lawn.x}x${lawn.y}")
 
         var pos: Option[Position] = None
         var cmds: Seq[Command.Command] = Nil
 
-        // Stratégie basique pour parser un fichier par paires de lignes éventuellement invalides
+        // Basic strategy to parse a file by pairs of lines that can be invalid
         file.foreach(line => {
           pos = Position.parse(line) match {
             case p if p.isDefined => p

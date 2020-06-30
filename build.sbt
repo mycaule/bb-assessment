@@ -16,6 +16,7 @@ lazy val root = (project in file(".")).
     )),
     name := "mower",
     libraryDependencies ++= Seq(
-      "org.scalatest" %% "scalatest" % "3.0.8" % Test
+      "org.scalatest" %% "scalatest" % "3.0.8" % Test,
+      "org.scala-lang.modules" %% "scala-parallel-collections" % "0.2.0"
     )
   )
