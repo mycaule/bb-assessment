@@ -70,7 +70,7 @@ object Mower {
       }
     }
 
-    // La tondeuse ne bouge pas si on essaie de la faire sortir
+    // The mower does not move if we try to make it go out
     if (lawn.check(newPos)) newPos else pos
   }
 

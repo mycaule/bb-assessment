@@ -55,16 +55,24 @@ Lawn of size 5x5
 [success] Total time: 1 s, completed Jun 30, 2020 12:02:14 PM
 ```
 
-The question of parallelization by threads is straightforward using [parallel collections](https://docs.scala-lang.org/overviews/parallel-collections/overview.html#fold).
+The question of parallelization by threads is straightforward using [parallel collections](https://docs.scala-lang.org/overviews/parallel-collections/overview.html#map).
 
 ```scala
 import scala.collection.parallel.CollectionConverters._
 
-// parse the input text file to a list of instructions,
-// then add .par.fold to make the moves in parallel
+// First read the instructions file
+val instructions: List[(Position, List[Command])] = ???
+
+// Process it in parallel, order is not preserved
+instructions.par.foreach(ins => {
+  val oldP = ins._1
+  val cmds = ins._2
+  val newP = cmds.foldLeft(oldP)(Mower.move(lawn))
+  println(s" :: $oldP ==> $newP via ${cmds.mkString}")
+})
 ```
 
 The only problem is when the files are not perfectly valid.
 In my implementation I dealt with the case where, see [`program.dirty.mow`](examples/program.dirty.mow) which can only be processed sequentially.
 
-Multiple instances process of the same program can of course be run if the text files are splitted in a preliminary step.
+Multiple instances process of the same program can of course be ran if the text files are splitted in a preliminary step.
